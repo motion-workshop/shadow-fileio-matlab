@@ -1,6 +1,8 @@
 #
 # Travis CI config file. Build and run unit tests on Linux.
 #
+dist: focal
+
 language: matlab
 
 matlab: latest
