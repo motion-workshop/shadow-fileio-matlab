@@ -1,0 +1,6 @@
+#
+# Travis CI config file. Build and run unit tests on Linux.
+#
+language: matlab
+
+matlab: latest
