@@ -44,8 +44,8 @@ function tests = testShadowFileio
     display('--- Running testShadowFileio ---');
     tic;
 
-    for i=1:size(f, 2)
-      feval(f{1, i});
+    for i=1:size(f, 1)
+      feval(f{i, 1});
     end
   
     toc
@@ -54,16 +54,13 @@ function tests = testShadowFileio
 end
 
 function testTakeFind(testCase)
-  folder = shadow.takefind();
-  assert(ischar(folder));
-  assert(exist(folder, 'file') == 7);
-  assert(exist([folder, '/configuration.mNode'], 'file') == 2);
-  assert(exist([folder, '/data.mStream'], 'file') == 2);
-  assert(exist([folder, '/take.mTake'], 'file') == 2);
+  filename = shadow.takefind();
+  assert(exist(filename, 'file') == 2);
+  assert(fullfile(filename) == filename);
 end
 
 function testTakeFreadHeader(testCase)
-  filename = [shadow.takefind(), '/data.mStream'];
+  filename = shadow.takefind();
   assert(exist(filename, 'file') == 2);
 
   fid = fopen(filename, 'rb', 'ieee-le');
@@ -75,10 +72,7 @@ function testTakeFreadHeader(testCase)
 end
 
 function testTakeRead(testCase)
-  filename = [shadow.takefind(), '/data.mStream'];
-  assert(exist(filename, 'file') == 2);
-
-  [data, header] = shadow.takeread(filename);
+  [data, header] = shadow.takeread();
 
   assert(ismatrix(data));
 
@@ -93,7 +87,7 @@ function testHeaderName(testCase)
 end
 
 function testHeaderRange(testCase)
-  filename = [shadow.takefind(), '/data.mStream'];
+  filename = shadow.takefind();
   assert(exist(filename, 'file') == 2);
 
   [data, header] = shadow.takeread(filename);
@@ -119,16 +113,12 @@ function testHeaderRange(testCase)
   % for all nodes in the take
   for i=1:m
     key = header.node_header(i, 1);
-    rng = shadow.header.range(header, key, name.a);
-    if isempty(rng)
+    a_range = shadow.header.range(header, key, name.a);
+    if isempty(a_range)
       continue
     end
 
     % Each index into the data matrix must be a valid column 
-    assert(all(rng <= size(data, 2)));
-
-    % subplot(m, 1, i);
-    % y = data(:, rng);
-    % plot(x, y);
+    assert(all(a_range <= size(data, 2)));
   end
 end

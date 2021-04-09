@@ -42,7 +42,7 @@ function examplePlotAll()
   %   '~/Documents/Motion/take/2021-04-01/0001/data.mStream'
   % Read more:
   %   https://www.motionshadow.com/data-folder
-  filename = [shadow.takefind(), '/data.mStream'];
+  filename = shadow.takefind();
 
   % Read the binary take stream format and return a matrix of data and the
   % header struct that we can use to find channels.
@@ -68,8 +68,6 @@ function examplePlotAll()
     subplot_rows = floor(num_node / 4);
     subplot_cols = 4;
   end
-
-  figure;
 
   % For each node, query its position data (c) which may not be present
   % for all nodes in the take

@@ -44,7 +44,7 @@ function examplePlotPositionTrail()
   %   '~/Documents/Motion/take/2021-04-01/0001/data.mStream'
   % Read more:
   %   https://www.motionshadow.com/data-folder
-  filename = [shadow.takefind(), '/data.mStream'];
+  filename = shadow.takefind();
 
   % Read the binary take stream format and return a matrix of data and the
   % header struct that we can use to find channels.
@@ -91,8 +91,6 @@ function examplePlotPositionTrail()
     cx = data(:, c_range(2));
     cy = data(:, c_range(3));
     cz = data(:, c_range(4));
-
-    figure;
 
     subplot(1, 2, 1);
     plot3(cx, cy, cz);
