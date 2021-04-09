@@ -13,4 +13,4 @@ before_script:
   - unzip /tmp/testdata.zip -d ~/
 
 script:
-  - matlab -batch "assertSuccess(runtests('testShadowFileio.m'))"
+  - matlab -batch "testShadowFileio"
