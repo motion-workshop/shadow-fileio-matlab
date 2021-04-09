@@ -55,7 +55,7 @@ function examplePlotAll()
   n = size(data, 1);
   
   % Time axis in seconds
-  x = linspace(0, n - 1, n) * header.h;
+  x = [0:n-1] * header.h;
 
   % Number of nodes with data in the take
   num_node = size(header.node_header, 1);

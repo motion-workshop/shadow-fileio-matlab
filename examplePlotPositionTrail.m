@@ -57,7 +57,7 @@ function examplePlotPositionTrail()
   n = size(data, 1);
 
   % Time axis in seconds
-  x = linspace(0, n - 1, n) * header.h;
+  x = [0:n-1] * header.h;
 
   % Number of nodes with data in the take
   num_node = size(header.node_header, 1);
@@ -97,10 +97,7 @@ function examplePlotPositionTrail()
 
     % We are not parsing the JSON take info file for the node names so we will
     % just label it by unique key
-    title(
-      sprintf(
-        'take\\_channel.key=%d, position in cm over %.1f seconds',
-        key, n * header.h));
+    title(sprintf('take\\_channel.key=%d, position in cm over %.1f seconds', key, n * header.h));
 
     % Compute per sample magnitude of the angular rate
     angular_rate = zeros(n, 1);
