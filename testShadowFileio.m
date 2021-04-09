@@ -56,7 +56,7 @@ end
 function testTakeFind(testCase)
   filename = shadow.takefind();
   assert(exist(filename, 'file') == 2);
-  assert(fullfile(filename) == filename);
+  assert(all(fullfile(filename) == filename));
 end
 
 function testTakeFreadHeader(testCase)
