@@ -34,6 +34,8 @@
 %
 
 function tests = testShadowFileio
+  display('--- Starting tests ---');
+  tic;
   fn = localfunctions();
   if exist('functiontests', 'builtin') == 5
     % Matlab
@@ -44,6 +46,9 @@ function tests = testShadowFileio
       feval(fn{i});
     end
   end
+  
+  toc
+  display('--- Tests complete ---');
 end
 
 function testTakeFind(testCase)
