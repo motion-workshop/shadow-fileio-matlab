@@ -1,7 +1,7 @@
 %TAKEFIND Search your user data folder for the most recent take.
 %
-%   FOLDER = TAKEFIND() Looks for the last take you recorded based on its date
-%   and sequence number.
+%   FILENAME = TAKEFIND() Looks for the last take you recorded based on its date
+%   and sequence number and returns an absolute path to the data stream file.
 %
 %   See also TAKEREAD.
 %
@@ -36,9 +36,9 @@
 % POSSIBILITY OF SUCH DAMAGE.
 %
 
-function [folder] = takefind()
-  folder = '';
-  user_data_folder = [getenv('HOME'), '/Documents/Motion'];
+function [filename] = takefind()
+  filename = 'data.mStream';
+  user_data_folder = fullfile(getenv('HOME'), 'Documents/Motion');
   
   % Outer loop, search for folders that are in the 2020-04-01 date format.
   listing = dir([user_data_folder, '/take']);
@@ -62,7 +62,7 @@ function [folder] = takefind()
         continue;
       end
 
-      folder = [item2.folder, '/', item2.name];
+      filename = fullfile(item2.folder, item2.name, filename);
       return;
     end
   end 
