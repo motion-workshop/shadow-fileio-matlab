@@ -55,8 +55,7 @@ function [index] = range(header, key, channel)
   % There are 27 named channels. Here are the number of elements per
   % channel.
   channel_dim = [
-    4, 4, 4, 3, 3, 3, 3, 4, 3, 3, 3, 1, 3, 3, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 
-    1, 1, 4
+    4, 4, 4, 3, 3, 3, 3, 4, 3, 3, 3, 1, 3, 3, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 1, 1, 4
   ];
 
   index = [];

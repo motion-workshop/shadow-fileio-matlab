@@ -1,10 +1,7 @@
 %TAKEFIND Search your user data folder for the most recent take.
 %
-%   TAKE = TAKEFIND() Looks for the last take you recorded based on its date
+%   FOLDER = TAKEFIND() Looks for the last take you recorded based on its date
 %   and sequence number.
-%
-%   [TAKE, FOLDER] = TAKEFIND() Optional output argument FOLDER contains the
-%   take folder in your user data folder.
 %
 %   See also TAKEREAD.
 %
@@ -39,11 +36,12 @@
 % POSSIBILITY OF SUCH DAMAGE.
 %
 
-function [take, folder] = takefind()
-  take = '';
-  folder = [getenv('HOME'), '/Documents/Motion/take/'];
+function [folder] = takefind()
+  folder = '';
+  user_data_folder = [getenv('HOME'), '/Documents/Motion'];
   
-  listing = dir(folder);
+  % Outer loop, search for folders that are in the 2020-04-01 date format.
+  listing = dir([user_data_folder, '/take']);
   for i=1:length(listing)
     item = listing(length(listing) - i + 1);
     if ~item.isdir
@@ -55,15 +53,16 @@ function [take, folder] = takefind()
       continue
     end
 
-    listing2 = dir([folder, item.name]);
-    for j=[1:length(listing2)]
+    % Inner loop, search for folders that are in the 0001 number format.
+    listing2 = dir([item.folder, '/', item.name]);
+    for j=1:length(listing2)
       item2 = listing2(length(listing2) - j + 1);
       match = regexp(item2.name, '^\d{4}$', 'match');
       if isempty(match)
         continue;
       end
 
-      take = [item.name, '/', item2.name];
+      folder = [item2.folder, '/', item2.name];
       return;
     end
   end 
