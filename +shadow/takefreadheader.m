@@ -47,7 +47,7 @@ function [s] = takefreadheader(fid)
 
   % Detect the header by our take file magic bytes.
   magic = int32(fread(fid, 2, 'int32'));
-  if ~isequal(magic, [-8882056; 87652969]),
+  if ~isequal(magic, [-8882056; 87652969])
     % No header present, rewind.
     fseek(fid, -8, 0);
     return;
@@ -68,7 +68,7 @@ function [s] = takefreadheader(fid)
   s.flags = 0;
 
   num_padding = 11;
-  if s.version > 2,
+  if s.version > 2
     s.flags = fread(fid, 1, 'uint32');
     num_padding = num_padding - 1;
   end
@@ -76,7 +76,14 @@ function [s] = takefreadheader(fid)
   % Padding. Reserved to 128 bytes.
   fread(fid, num_padding, 'int32');
 
-  % Two integers per node. The node key and its channel mask.
-  s.node_header = uint32(fread(fid, 2 * s.num_node, 'uint32'));
-  s.node_header = reshape(s.node_header, 2, s.num_node)';
+  % Per node header size varies on the take stream version. Version 4 and later
+  % is 32 bytes with including a device UUID.
+  header_size = 2;
+  if s.version > 3
+    header_size = 8;
+  end
+
+  % Two or more integers per node. The node key and its channel mask.
+  s.node_header = uint32(fread(fid, header_size * s.num_node, 'uint32'));
+  s.node_header = reshape(s.node_header, header_size, s.num_node)';
 end

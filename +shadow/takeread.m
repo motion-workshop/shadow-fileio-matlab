@@ -61,7 +61,7 @@ function [data, header] = takeread(filename)
 
   fid = fopen(filename, 'rb', 'ieee-le');
 
-  header = motion.takefreadheader(fid);
+  header = shadow.takefreadheader(fid);
   if header.version == 0
     fclose(fid);
     error('failed to read header from file, not in mStream format');
@@ -80,4 +80,3 @@ function [data, header] = takeread(filename)
 
   data = reshape(buffer, nChannels, mFrames)';
 end
-% function [data, header] = takeread(filename)

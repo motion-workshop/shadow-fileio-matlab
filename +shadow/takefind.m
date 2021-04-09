@@ -1,14 +1,16 @@
-%RANGE Find a named channel for a node by its key.
+%TAKEFIND Search your user data folder for the most recent take.
 %
-%   Search a take stream header for a particular node and channel. Return the
-%   array of indices that can be used to query the columns in the MxN matrix
-%   of data from the take stream.
+%   TAKE = TAKEFIND() Looks for the last take you recorded based on its date
+%   and sequence number.
 %
-%   A = range(HEADER, KEY, CHANNEL)
+%   [TAKE, FOLDER] = TAKEFIND() Optional output argument FOLDER contains the
+%   take folder in your user data folder.
+%
+%   See also TAKEREAD.
 %
 
 %
-% @file    +shadow/+header/range.m
+% @file    +shadow/takefind.m
 % @version 4.0
 %
 % Copyright (c) 2021, Motion Workshop
@@ -37,47 +39,32 @@
 % POSSIBILITY OF SUCH DAMAGE.
 %
 
-function [index] = range(header, key, channel)
-  narginchk(3, 3);
-
-  if ~isstruct(header)
-    error('header must be a struct');
-  end
-
-  if ~isnumeric(key) || key <= 0
-    error('key must be a positive integer');
-  end
-
-  if ~isnumeric(channel) || channel <= 0
-    error('channel must be a positive integer');
-  end
-
-  % There are 27 named channels. Here are the number of elements per
-  % channel.
-  channel_dim = [
-    4, 4, 4, 3, 3, 3, 3, 4, 3, 3, 3, 1, 3, 3, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 
-    1, 1, 4
-  ];
-
-  index = [];
-
-  itr = 1;
-  for i=1:header.num_node,
-    mask_i = header.node_header(i, 2);
-    if mask_i == 0,
-      continue;
+function [take, folder] = takefind()
+  take = '';
+  folder = [getenv('HOME'), '/Documents/Motion/take/'];
+  
+  listing = dir(folder);
+  for i=1:length(listing)
+    item = listing(length(listing) - i + 1);
+    if ~item.isdir
+      continue
     end
 
-    key_i = header.node_header(i, 1);
-    for j=1:length(channel_dim),
-      channel_j = bitshift(1, j - 1);
-      if bitand(mask_i, channel_j),
-        if (key_i == key) && (channel_j == channel),
-          index = itr:itr + channel_dim(j) - 1;
-          return;
-        end
-        itr = itr + channel_dim(j);
+    match = regexp(item.name, '^\d{4}-\d{2}-\d{2}$', 'match');
+    if isempty(match)
+      continue
+    end
+
+    listing2 = dir([folder, item.name]);
+    for j=[1:length(listing2)]
+      item2 = listing2(length(listing2) - j + 1);
+      match = regexp(item2.name, '^\d{4}$', 'match');
+      if isempty(match)
+        continue;
       end
+
+      take = [item.name, '/', item2.name];
+      return;
     end
-  end
+  end 
 end
