@@ -48,7 +48,7 @@ function [data, header] = takeread(filename)
   narginchk(0, 1);
 
   if nargin < 1
-    filename = 'data.mStream';
+    filename = shadow.takefind();
   end
 
   if ~ischar(filename)
