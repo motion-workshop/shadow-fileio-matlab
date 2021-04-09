@@ -124,8 +124,8 @@ function testHeaderRange(testCase)
       continue
     end
 
-    % Each index into the data matrix must
-    assert(rng < n);
+    % Each index into the data matrix must be a valid column 
+    assert(all(rng <= size(data, 2)));
 
     % subplot(m, 1, i);
     % y = data(:, rng);
