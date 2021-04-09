@@ -6,3 +6,11 @@ dist: focal
 language: matlab
 
 matlab: latest
+
+# Download some take data and place in a ~/Documents/Motion folder.
+before_script:
+  - wget https://storage.googleapis.com/motionshadow/shadow-fileio-testdata.zip -O /tmp/testdata.zip
+  - unzip /tmp/testdata.zip -d ~/
+
+script:
+  - matlab -batch "assertSuccess(runtests('testShadowFileio.m'))"
