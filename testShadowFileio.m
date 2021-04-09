@@ -34,22 +34,22 @@
 %
 
 function tests = testShadowFileio  
+  f = localfunctions();
   if exist('functiontests')
     % Matlab
-    tests = functiontests(localfunctions);
+    tests = functiontests(f);
     return;
   else
     % Octave
-    display('--- Starting tests ---');
+    display('--- Running testShadowFileio ---');
     tic;
 
-    fn = localfunctions();
-    for i=1:size(fn, 1)
-      feval(fn{i, 1});
+    for i=1:size(f, 2)
+      feval(f{1, i});
     end
   
     toc
-    display('--- Completed tests ---');
+    display('--- Done testShadowFileio ---');
   end
 end
 
