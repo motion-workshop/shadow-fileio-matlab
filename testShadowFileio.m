@@ -33,22 +33,24 @@
 % POSSIBILITY OF SUCH DAMAGE.
 %
 
-function tests = testShadowFileio
-  display('--- Starting tests ---');
-  tic;
-  fn = localfunctions();
-  if exist('functiontests', 'builtin') == 5
+function tests = testShadowFileio  
+  if exist('functiontests')
     % Matlab
-    functiontests(fn);
+    tests = functiontests(localfunctions);
+    return;
   else
     % Octave
-    for i=1:length(fn)
-      feval(fn{i});
+    display('--- Starting tests ---');
+    tic;
+
+    fn = localfunctions();
+    for i=1:size(fn, 1)
+      feval(fn{i, 1});
     end
-  end
   
-  toc
-  display('--- Tests complete ---');
+    toc
+    display('--- Completed tests ---');
+  end
 end
 
 function testTakeFind(testCase)
